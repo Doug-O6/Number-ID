@@ -50,6 +50,10 @@ pygame.display.set_caption("Koen's Number ID Game")
 # Create curser rect
 curser_rect = pygame.Rect(0,0,20,20)
 
+# Sounds -----------------
+sound_1 = pygame.mixer.Sound('Sounds/retro-game.wav')
+applause = pygame.mixer.Sound('Sounds/applause.wav')
+
 
 # Generate a list of integer number images at random locations
 num_img_list = []
@@ -105,11 +109,18 @@ while run:
   pos = pygame.mouse.get_pos()
   curser_rect.center = pos
 
-  # Change number position when curser rect collides with number rect
-  if curser_rect.collidelist(num_rect_list) >= 0:
-    #print(curser_rect.collidelist(num_rect_list))
-    num_rect_list[curser_rect.collidelist(num_rect_list)] = num_seq_rect_list[curser_rect.collidelist(num_rect_list)]
+  # Change number position when curser rect collides with number rect and play "bleep" sound
+  # when number moves. Play applause when 9 is chosen.
+  num = curser_rect.collidelist(num_rect_list)
 
+  if num >= 0:
+    #print(f"First print {num}")
+    sound_1.play()
+    num_rect_list[num] = num_seq_rect_list[num]
+
+    if num == 9:
+      applause.play()
+  
   # Event handler
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
